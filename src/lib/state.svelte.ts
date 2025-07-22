@@ -5,6 +5,7 @@ export const days = writable<Dia[]>([])
 export const tipoHoras = writable('usach')
 
 export const toolbar = [
+  { color: 'bg-white hover:bg-gray-100', nombre: 'Borrar' },
   { color: 'bg-red-400', nombre: 'Hora 1' },
   { color: 'bg-blue-400', nombre: 'Hora 2' },
   { color: 'bg-yellow-400', nombre: 'Hora 3' },
