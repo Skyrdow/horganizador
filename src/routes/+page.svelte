@@ -5,7 +5,6 @@
 	import { modulos_usach } from '$lib/index';
 	import { days } from '$lib/state.svelte';
 
-
 	let horas_modulo: Hora[] = modulos_usach.map((modulo) => {
 		return { contenido: modulo, color: 'bg-white' };
 	});
@@ -31,11 +30,11 @@
 </script>
 
 <h1 class="text-center text-2xl font-bold">horganizador</h1>
-<img src="/god.jpg" alt="dog propeller hat meme" class="mx-auto size-32" />
+<img src="/god.jpg" alt="dog propeller hat meme" class="mx-auto my-4 size-32" />
 
 <ToolBar />
 
-<div class="mx-4 my-8 grid grid-cols-7 border">
+<div class="mx-4 my-8 grid grid-cols-7 border bg-white">
 	<ColumnaHoras titulo="Módulo" horas={horas_modulo} />
 	{#each $days as day, day_index}
 		<Columna titulo={day.nombre} horas={day.horas} {day_index}></Columna>
