@@ -4,10 +4,10 @@
 	let nombreInput = $state('');
 </script>
 
-<div class="mx-auto inline-flex w-full justify-center gap-2">
+<div class="flex w-full flex-wrap gap-2 px-4">
 	{#each $toolbar as tool, index}
 		<button
-			class={`h-8 w-16 ${tool.color} ${$toolIndex == index ? 'ring-2' : ''}`}
+			class={`line-clamp-2 h-12 flex-1 text-sm leading-3.5 ${tool.color} ${$toolIndex == index ? 'ring-2' : ''}`}
 			onclick={() => {
 				toolIndex.set(index);
 			}}>{$toolbar[index].nombre}</button

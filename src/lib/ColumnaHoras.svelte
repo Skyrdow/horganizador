@@ -7,7 +7,7 @@
 	{#each horas as modulo, col_index}
 		<span class={`${modulo.color} my-auto h-fit w-full text-center`}>{modulo.contenido}</span>
 		{#if col_index % 3 == 2}
-			<span class="h-full w-full bg-amber-200"></span>
+			<span class="h-8 w-full bg-amber-200"></span>
 		{/if}
 	{/each}
 </div>

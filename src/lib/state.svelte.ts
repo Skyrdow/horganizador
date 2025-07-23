@@ -14,3 +14,8 @@ export const toolbar = writable([
 	{ color: 'bg-cyan-400', nombre: 'Hora 6' },
 	{ color: 'bg-orange-400', nombre: 'Hora 7' }
 ]);
+
+export const options = writable({
+	text_size: 'text-md',
+	row_height: 'h-[48px]'
+});
