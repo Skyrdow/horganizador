@@ -18,6 +18,7 @@
 <div class="mx-auto mt-4 inline-flex w-full justify-center gap-2">
 	<input type="text" placeholder="Cambia el nombre" bind:value={nombreInput} />
 	<button
+		disabled={$toolIndex ==0}
 		onclick={() => {
 			$toolbar[$toolIndex].nombre = nombreInput;
 		}}
