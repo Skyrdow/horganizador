@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import Columna from '$lib/Columna.svelte';
 	import ColumnaHoras from '$lib/ColumnaHoras.svelte';
 	import ToolBar from '$lib/ToolBar.svelte';
@@ -19,14 +20,19 @@
 			}));
 	}
 
-	days.set([
-		{ nombre: 'Lunes', horas: horasVacias(cantidad_horas) },
-		{ nombre: 'Martes', horas: horasVacias(cantidad_horas) },
-		{ nombre: 'Miercoles', horas: horasVacias(cantidad_horas) },
-		{ nombre: 'Jueves', horas: horasVacias(cantidad_horas) },
-		{ nombre: 'Viernes', horas: horasVacias(cantidad_horas) },
-		{ nombre: 'Sábado', horas: horasVacias(cantidad_horas) }
-	]);
+	onMount(() => {
+		// Verificar si ya hay días guardados en localStorage
+		if ($days.length === 0) {
+			days.set([
+				{ nombre: 'Lunes', horas: horasVacias(cantidad_horas) },
+				{ nombre: 'Martes', horas: horasVacias(cantidad_horas) },
+				{ nombre: 'Miercoles', horas: horasVacias(cantidad_horas) },
+				{ nombre: 'Jueves', horas: horasVacias(cantidad_horas) },
+				{ nombre: 'Viernes', horas: horasVacias(cantidad_horas) },
+				{ nombre: 'Sábado', horas: horasVacias(cantidad_horas) }
+			]);
+		}
+	});
 </script>
 
 <h1 class="text-center text-2xl font-bold">horganizador</h1>
