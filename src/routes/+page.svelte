@@ -1,17 +1,19 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Columna from '$lib/Columna.svelte';
-	import ColumnaHoras from '$lib/ColumnaHoras.svelte';
-	import ToolBar from '$lib/ToolBar.svelte';
+	import { createNewSchedule } from '$lib/state.svelte';
 	import { modulos_usach } from '$lib/index';
-	import { days, options } from '$lib/state.svelte';
+	import { goto } from '$app/navigation';
+	import type { Dia, Hora } from '$lib/types.d';
 
+	let loading = true;
+
+	// Lógica para generar el horario por defecto
 	let horas_modulo: Hora[] = modulos_usach.map((modulo) => {
 		return { contenido: modulo, color: 'bg-white' };
 	});
 	let cantidad_horas = horas_modulo.length;
 
-	function horasVacias(cantidad: number) {
+	function horasVacias(cantidad: number): Hora[] {
 		return Array(cantidad)
 			.fill(null)
 			.map(() => ({
@@ -20,45 +22,38 @@
 			}));
 	}
 
-	onMount(() => {
-		// Verificar si ya hay días guardados en localStorage
-		if ($days.length === 0) {
-			days.set([
-				{ nombre: 'Lunes', horas: horasVacias(cantidad_horas) },
-				{ nombre: 'Martes', horas: horasVacias(cantidad_horas) },
-				{ nombre: 'Miercoles', horas: horasVacias(cantidad_horas) },
-				{ nombre: 'Jueves', horas: horasVacias(cantidad_horas) },
-				{ nombre: 'Viernes', horas: horasVacias(cantidad_horas) },
-				{ nombre: 'Sábado', horas: horasVacias(cantidad_horas) }
-			]);
+	function getDefaultDays(): Dia[] {
+		return [
+			{ nombre: 'Lunes', horas: horasVacias(cantidad_horas) },
+			{ nombre: 'Martes', horas: horasVacias(cantidad_horas) },
+			{ nombre: 'Miercoles', horas: horasVacias(cantidad_horas) },
+			{ nombre: 'Jueves', horas: horasVacias(cantidad_horas) },
+			{ nombre: 'Viernes', horas: horasVacias(cantidad_horas) },
+			{ nombre: 'Sábado', horas: horasVacias(cantidad_horas) }
+		];
+	}
+
+	onMount(async () => {
+		const initialDays = getDefaultDays();
+		const newId = await createNewSchedule(initialDays);
+
+		if (newId) {
+			await goto(`/schedule/${newId}`);
+		} else {
+			loading = false;
 		}
 	});
 </script>
 
-<h1 class="text-center text-2xl font-bold">horganizador</h1>
-<img src="/god.jpg" alt="dog propeller hat meme" class="mx-auto my-4 size-32" />
-
-<ToolBar />
-
-<div class="mx-4 my-8 grid grid-cols-7 border bg-white">
-	<ColumnaHoras titulo="Módulo" horas={horas_modulo} />
-	{#each $days as day, day_index}
-		<Columna titulo={day.nombre} horas={day.horas} {day_index}></Columna>
-	{/each}
-</div>
-
-<div class="mx-4 mb-8 inline-flex items-center gap-4">
-	<label for="text_size">Tamaño del texto: </label>
-	<select id="text_size" bind:value={$options.text_size}>
-		<option value="text-sm">Pequeño</option>
-		<option value="text-md">Normal</option>
-		<option value="text-xl">Grande</option>
-	</select>
-
-	<label for="row_height">Altura de los bloques: </label>
-	<select bind:value={$options.row_height}>
-		<option value="h-[32px]">Pequeño</option>
-		<option value="h-[48px]">Normal</option>
-		<option value="h-[64px]">Grande</option>
-	</select>
+<div class="p-8 text-center">
+	{#if loading}
+		<h1 class="text-2xl font-bold">Creando nuevo horario colaborativo...</h1>
+		<p>Por favor, espera un momento.</p>
+	{:else}
+		<h1 class="text-2xl font-bold text-red-500">Error al crear el horario.</h1>
+		<p>
+			Asegúrate de que tus variables de entorno de Supabase estén configuradas y la tabla
+			'schedules' exista.
+		</p>
+	{/if}
 </div>

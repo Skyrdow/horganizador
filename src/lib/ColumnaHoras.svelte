@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { Hora } from './types.d'; // Importación de Hora
+
 	let { titulo, horas }: { titulo: string; horas: Hora[] } = $props();
 </script>
 
@@ -11,3 +13,4 @@
 		{/if}
 	{/each}
 </div>
+

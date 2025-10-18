@@ -1,9 +1,10 @@
-type Hora = {
+export type Hora = {
 	contenido: string;
 	color: string;
 };
 
-type Dia = {
+export type Dia = {
 	nombre: string;
 	horas: Hora[];
 };
+

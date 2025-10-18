@@ -1,5 +1,7 @@
 <script lang="ts">
-	import { days, options, toolbar, toolIndex } from './state.svelte';
+	import { days, options, toolbar, toolIndex, updateSchedule } from './state.svelte';
+	import { get } from 'svelte/store';
+	import type { Hora } from './types.d'; // Importación de Hora
 
 	let { titulo, horas, day_index }: { titulo: string; horas: Hora[]; day_index: number } = $props();
 </script>
@@ -10,14 +12,22 @@
 		<button
 			class={`${$days[day_index].horas[col_index].color} ${$options.text_size} ${$options.row_height} w-full`}
 			onclick={() => {
-				$days[day_index].horas[col_index].color = $toolbar[$toolIndex].color;
+				// 1. Clonar el array de días para asegurar la inmutabilidad y enviar a Supabase
+				const currentDays = get(days);
+				const newDays = JSON.parse(JSON.stringify(currentDays)); // Clonación profunda
+
+				// 2. Aplicar el cambio al array clonado
+				newDays[day_index].horas[col_index].color = $toolbar[$toolIndex].color;
 
 				// borrar
 				if ($toolIndex != 0) {
-					$days[day_index].horas[col_index].contenido = $toolbar[$toolIndex].nombre;
+					newDays[day_index].horas[col_index].contenido = $toolbar[$toolIndex].nombre;
 				} else {
-					$days[day_index].horas[col_index].contenido = '-';
+					newDays[day_index].horas[col_index].contenido = '-';
 				}
+
+				// 3. Enviar la actualización a Supabase
+				updateSchedule(newDays);
 			}}>{modulo.contenido}</button
 		>
 		{#if col_index % 3 == 2}
